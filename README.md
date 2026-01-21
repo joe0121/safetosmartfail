@@ -3,13 +3,16 @@
 A lightweight Python utility designed for PowerScale/Isilon storage administrators. This script calculates the safety of a "SmartFail" operation by projecting the cluster's utilization and protection state after a node is removed.
 
 ## 🚀 Purpose
-Before removing a node (SmartFailing), OneFS must move all data from that node to the remaining nodes in the pool through a process called **FlexProtect**. 
+The process of smartfailing a node OneFS must move all data from that node to the remaining nodes in the pool through a process called **FlexProtect**. 
 
-If the remaining nodes do not have enough space, or if the node count drops below the protection policy minimum, the cluster risks entering a **Read-Only** state, experiencing severe performance degradation, or risking data loss.
+If the remaining nodes do not have enough space, or if the node count drops below the protection policy minimum, the cluster risks entering a **Read-Only** state, experiencing severe performance degradation, or data loss.
+
+OneFS does not check to ensure the resulting node count will have sufficiant space after the smartfail so prior to issuing the smartfail command you must insure there will be enough available space and the capacity utilization will not exceed safe limits. 
 
 ---
 
 ## 🛠️ Features
+
 * **Protection Awareness:** Pre-configured with minimum node requirements for all standard OneFS protection levels (e.g., `+2d:1n`, `+3n`, `+4d:2n`).
 * **Threshold Alerts:**
     * **🟢 SAFE (< 85%):** Proceed with the operation.
@@ -57,6 +60,7 @@ isi storagepool list
 ## ⚠️ Capacity Threshold Logic
 
 OneFS behavior changes significantly based on pool utilization:
+
 | Utilization | Status | Impact on FlexProtect |
 | :--- | :--- | :--- |
 | **< 85%** | **Safe** | Optimal speed; plenty of free blocks for data restriping. |
@@ -66,6 +70,11 @@ OneFS behavior changes significantly based on pool utilization:
 
 
 ---
+
+## References
+https://www.dell.com/support/kbdoc/en-il/000009755/how-to-accurately-determine-space-usage-of-individual-shares-or-quotas-on-isilon
+https://www.delltechnologies.com/asset/nl-be/products/storage/industry-market/h16857-wp-powerscale-onefs-best-practices.pdf
+
 
 ## 📄 Disclaimer
 This tool is for administrative guidance only. Always verify cluster health via `isi status` and ensure no other high-priority jobs are running before initiating a SmartFail.
