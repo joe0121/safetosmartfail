@@ -36,5 +36,16 @@ If the remaining nodes do not have enough space, or if the node count drops belo
 ## ⚠️ Capacity Threshold Logic
 
 OneFS behavior changes significantly based on pool utilization:
+| Utilization | Status | Impact on FlexProtect |
+| :--- | :--- | :--- |
+| **< 85%** | **Safe** | Optimal speed; plenty of free blocks for data restriping. |
+| **85% - 90%** | **Caution** | Re-protection may be slower; system begins hunting for free space. |
+| **> 90%** | **Unsafe** | "Spillover" mode; metadata-heavy searches make SmartFail extremely slow. |
 
-|
+
+
+---
+
+## 📄 Disclaimer
+This tool is for administrative guidance only. Always verify cluster health via `isi status` and ensure no other high-priority jobs are running before initiating a SmartFail.
+
