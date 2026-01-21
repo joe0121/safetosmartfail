@@ -20,6 +20,27 @@ If the remaining nodes do not have enough space, or if the node count drops belo
 ---
 
 ## 📋 How to Use
+
+## 🛠️ Phase 1: Pre-Requisites (Run on Cluster)
+
+Before using the calculator, perform these steps via SSH on any node in the cluster to gather accurate data and ensure cluster stability.
+
+### 1. Perform Log Gather
+1. Gather Logs:
+```bash
+isi_gather_info --no-dumps --no-cores
+```
+2. Check for hardware failures:
+   ```bash
+   isi healthcheck evaluations run default
+   isi healthcheck evaluations list
+```
+3.  Determine pool protection level and utilization
+```bash
+isi storagepool list
+```
+
+
 1.  **Launch:** Run the script using Python 3:
     ```bash
     python smartfail_checker.py
